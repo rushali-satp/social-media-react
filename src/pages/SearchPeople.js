@@ -118,7 +118,7 @@ const SearchPeople = () => {
                     Cancel
                   </button>
                 ) : (
-                  <button
+                  <button 
                     className="btn btn-primary"
                     onClick={() => sendRequest(item.userId)}
                   >
