@@ -7,6 +7,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const users = JSON.parse(localStorage.getItem("users")) || {};
@@ -18,24 +19,32 @@ const Login = () => {
 
   const handleLogin = async (e) => {
   e.preventDefault();
+  setLoading(true); // start loader
 
-  const response = await fetch("http://localhost:8080/api/users/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      userLoginId: username,
-      password: password
-    })
-  });
+  try {
+    const response = await fetch("http://localhost:8080/api/users/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        userLoginId: username,
+        password: password
+      })
+    });
 
-  if (response.ok) {
-    const data = await response.json();
-    localStorage.setItem("loggedInUser", JSON.stringify(data[0]));
-    navigate("/home");
-  } else {
-    alert("Username or password incorrect");
+    if (response.ok) {
+      const data = await response.json();
+      localStorage.setItem("loggedInUser", JSON.stringify(data[0]));
+      navigate("/home");
+    } else {
+      alert("Username or password incorrect");
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Something went wrong");
+  } finally {
+    setLoading(false); // stop loader
   }
 };
 
@@ -43,6 +52,8 @@ const Login = () => {
   return (
     <div className="container-fluid min-vh-100 d-flex align-items-center bg-light">
       <div className="row w-100 mx-0">
+
+        
         {/* Left Image Section */}
         <div className="col-md-6 d-none d-md-flex align-items-center justify-content-center bg-primary text-white">
           <div className="text-center p-5">
@@ -96,9 +107,9 @@ const Login = () => {
                   </button>
                 </div>
               </div>
-              <button type="submit" className="btn btn-primary w-100 mt-2">
-                Login / Register
-              </button>
+             <button type="submit" className="btn btn-primary w-100 mt-2" disabled={loading}>
+                {loading ? "Logging in..." : "Login / Register"}
+             </button>
             </form>
 
             <p className="text-center text-muted mt-4 mb-0 small">
@@ -120,7 +131,17 @@ const Login = () => {
           </div>
         </div>
       </div>
+
+      {loading && (
+        <div className="position-fixed top-0 start-0 w-100 vh-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-50" style={{ zIndex: 9999 }}>
+          <div className="spinner-border text-light" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      )}
     </div>
+
+
   );
 };
 

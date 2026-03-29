@@ -56,14 +56,62 @@ const fetchFollowingUsers = async () => {
   }
 };
 
-const unFollowUser = (id) => {
+const unFollowUser = async (id) => {
   console.log("Unfollow user:", id);
-  // call API for unfollow
+
+  try {
+    const response = await fetch("http://localhost:8080/api/userRequest/removeFromFollowing", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        sendRequestUserId: userId,
+        getRequestUserId: id,
+      }),
+    });
+
+    const result1 = await response.text(); // or .json() if backend sends JSON
+    if (result1.msgcode === 200) {
+      alert(result1.data); // "User Unfollow successfully"
+
+      // navigate after alert
+      navigate("/profilePage");
+    } else {
+      alert("Something went wrong");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
 };
 
-const removeFollower = (id) => {
+const removeFollower = async (id) => {
   console.log("Remove follower:", id);
-  // call API for removing follower
+  try {
+    const response = await fetch("http://localhost:8080/api/userRequest/removeFollowers", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        sendRequestUserId: id,
+        getRequestUserId: userId,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (result.msgcode === 200) {
+      alert(result.data); // "User Unfollow successfully"
+
+      // navigate after alert
+      navigate("/profilePage");
+    } else {
+      alert("Something went wrong");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
 };
 
  return (
