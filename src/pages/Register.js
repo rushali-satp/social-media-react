@@ -10,12 +10,48 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [emailId, setEmailId] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
+  const [errors, setErrors] = useState({});
 
   const handleRegister = async () => {
-    if (!regUsername || !regName || !regPassword || !emailId || !mobileNumber) {
-      alert("All fields are required");
-      return;
-    }
+    const newErrors = {};
+     const mobileRegex = /^[6-9]\d{9}$/;
+     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+     const usernameRegex = /^[^\s.]+$/;
+
+
+   if (!regUsername) {
+    newErrors.regUsername = "Username is required";
+  } else if (!usernameRegex.test(regUsername)) {
+    newErrors.regUsername = "No spaces or dots allowed";
+  }
+
+  if (!regName) {
+    newErrors.regName = "Official Name is required";
+  }
+
+  if (!regPassword) {
+    newErrors.regPassword = "Password is required";
+  }
+
+  
+  if (!emailId) {
+    newErrors.emailId = "Email is required";
+  } else if (!emailRegex.test(emailId)) {
+    newErrors.emailId = "Invalid email format";
+  }
+
+  if (!mobileNumber) {
+    newErrors.mobileNumber = "Mobile number is required";
+  } else if (!mobileRegex.test(mobileNumber)) {
+    newErrors.mobileNumber = "Must be 10 digits & start with 6-9";
+  }
+
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    return;
+  }
+
+  setErrors({}); 
 
     const payload = {
       userLoginId: regUsername,
@@ -61,6 +97,11 @@ const Register = () => {
             value={regUsername}
             onChange={(e) => setRegUsername(e.target.value)}
           />
+          {errors.regUsername && (
+            <div style={{ color: "red", fontSize: "12px" }}>
+              {errors.regUsername}
+            </div>
+          )}
         </div>
 
         {/* Password */}
@@ -75,6 +116,11 @@ const Register = () => {
               value={regPassword}
               onChange={(e) => setRegPassword(e.target.value)}
             />
+            {errors.regPassword && (
+              <div style={{ color: "red", fontSize: "12px" }}>
+                {errors.regPassword}
+              </div>
+            )}
             <button
               className="btn btn-outline-secondary"
               type="button"
@@ -96,6 +142,11 @@ const Register = () => {
             value={regName}
             onChange={(e) => setRegName(e.target.value)}
           />
+          {errors.regName && (
+            <div style={{ color: "red", fontSize: "12px" }}>
+              {errors.regName}
+            </div>
+          )}
         </div>
 
         {/* Email Id */}
@@ -109,6 +160,11 @@ const Register = () => {
             value={emailId}
             onChange={(e) => setEmailId(e.target.value)}
           />
+          {errors.emailId && (
+            <div style={{ color: "red", fontSize: "12px" }}>
+              {errors.emailId}
+            </div>
+          )}
         </div>
 
         {/* Mobile Number */}
@@ -122,6 +178,11 @@ const Register = () => {
             value={mobileNumber}
             onChange={(e) => setMobileNumber(e.target.value)}
           />
+          {errors.mobileNumber && (
+            <div style={{ color: "red", fontSize: "12px" }}>
+              {errors.mobileNumber}
+            </div>
+          )}
         </div>
 
         <div className="d-flex justify-content-between mt-4">

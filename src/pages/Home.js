@@ -28,6 +28,7 @@ const Home = () => {
       image: item.postImageName
         ? `http://localhost:8080/uploads/${item.postImageName}`
         : null,
+      music: item.musicUrl,
       likes: item.likes || 0,
       comments: item.comments || [],
     }));

@@ -72,6 +72,17 @@ const PostItem = ({
           </div>
         )}
 
+        {/* 🎵 MUSIC (NEW) */}
+        {post.music && (
+          <div className="mb-2">
+            <small className="text-muted">🎵 Music</small>
+            <audio controls className="w-100 mt-1">
+              <source src={post.music} />
+              Your browser does not support audio.
+            </audio>
+          </div>
+        )}
+
       <div className="d-flex gap-2">
 
         {/* 👍 Like */}
