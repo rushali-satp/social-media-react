@@ -14,6 +14,8 @@ const AddPost = ({ onAdd }) => {
   const [audioPlayer, setAudioPlayer] = useState(null);
   const [currentPlayingId, setCurrentPlayingId] = useState(null);
 
+  const [imageError, setImageError] = useState("");
+
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
   // Fetch music list from backend
@@ -26,6 +28,11 @@ const AddPost = ({ onAdd }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (imageError) {
+    alert(imageError);
+    return;
+  }
 
     if (!postText.trim() && !image && !music) return;
 
@@ -81,16 +88,39 @@ const AddPost = ({ onAdd }) => {
     }
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file);
+ const handleImageChange = (e) => {
+  const file = e.target.files[0];
 
-      const reader = new FileReader();
-      reader.onloadend = () => setPreview(reader.result);
-      reader.readAsDataURL(file);
-    }
-  };
+  if (!file) return;
+
+  const fileName = file.name;
+
+  if (fileName.includes(" ")) {
+    setImageError("Image name should not contain spaces.");
+    setImage(null);
+    return;
+  }
+
+  const validNameRegex = /^[a-zA-Z0-9._-]+$/;
+  if (!validNameRegex.test(fileName)) {
+    setImageError("Image name should not contain special characters.");
+    setImage(null);
+    return;
+  }
+
+  if (file.size > 1024 * 1024) {
+    setImageError("Image size must be less than 1 MB.");
+    setImage(null);
+    return;
+  }
+
+  setImageError("");
+  setImage(file);
+
+  const reader = new FileReader();
+  reader.onloadend = () => setPreview(reader.result);
+  reader.readAsDataURL(file);
+};
 
  const handlePlay = (m) => {
   // If same song is clicked → STOP
@@ -163,6 +193,12 @@ const AddPost = ({ onAdd }) => {
                 hidden
               />
             </label>
+
+            {imageError && (
+              <div style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
+                {imageError}
+              </div>
+            )}
 
             {/* TOGGLE MUSIC LIST */}
             <button
