@@ -256,6 +256,7 @@ const handleDelete = async (postId) => {
               <textarea
                 className="form-control mb-2"
                 value={bioData}
+                placeholder="Bio data ......"
                 onChange={(e) => setBioData(e.target.value)}
               />
 

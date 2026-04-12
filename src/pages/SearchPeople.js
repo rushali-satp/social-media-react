@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar";
 const SearchPeople = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   const userId = loggedInUser?.userId;
@@ -31,6 +32,11 @@ const SearchPeople = () => {
     }
   };
 
+  const filteredUsers = users.filter((item) =>
+  item.userOfficialName?.toLowerCase().includes(searchText.toLowerCase()) ||
+  item.userLoginId?.toLowerCase().includes(searchText.toLowerCase())
+);
+
   const sendRequest = async (userIdGetRequest) => {
   try {
     const response = await axios.post(
@@ -55,8 +61,22 @@ const SearchPeople = () => {
       {/* HEADER */}
       <Navbar username={userOfficialName} userId={userId}/>
 
+
+
       <div className="container mt-4 mb-5">
         <h4 className="mb-4">Search People</h4>
+
+        
+      <div className="mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="🔍 Search by name or username..."
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          style={{ maxWidth: "700px", marginLeft: "18%" }}
+        />
+      </div>
 
         {users.map((item) => {
           const imageUrl = item.profileImageName
