@@ -7,6 +7,8 @@ const SearchPeople = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   const userId = loggedInUser?.userId;
@@ -36,6 +38,51 @@ const SearchPeople = () => {
   item.userOfficialName?.toLowerCase().includes(searchText.toLowerCase()) ||
   item.userLoginId?.toLowerCase().includes(searchText.toLowerCase())
 );
+
+
+const handleSearch = async (value) => {
+  setSearchText(value);
+
+  if (value.trim() === "") {
+    setShowDropdown(false);
+    fetchUsers(); // fallback to all users
+    return;
+  }
+
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/api/search/users",
+      {
+        userOfficialName: value,
+        userLoginId: value,
+      }
+    );
+
+    setSearchResults(response.data);
+    setShowDropdown(true);
+  } catch (error) {
+    console.error("Search error:", error);
+  }
+};
+
+const handleSelectUser = async (selectedUser) => {
+  setSearchText(selectedUser.userLoginId); // show in input
+  setShowDropdown(false);
+
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/api/search/getSearchProfileDetails",
+      {
+        userId: userId, // from local/session
+        searchUserId: selectedUser.userId,
+      }
+    );
+
+    setUsers(response.data); // show only selected user
+  } catch (error) {
+    console.error("Profile fetch error:", error);
+  }
+};
 
   const sendRequest = async (userIdGetRequest) => {
   try {
@@ -67,16 +114,61 @@ const SearchPeople = () => {
         <h4 className="mb-4">Search People</h4>
 
         
-      <div className="mb-3">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="🔍 Search by name or username..."
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          style={{ maxWidth: "700px", marginLeft: "18%" }}
-        />
-      </div>
+      <div className="mb-3" style={{ position: "relative" }}>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="🔍 Search by name or username..."
+            value={searchText}
+            onChange={(e) => handleSearch(e.target.value)}
+            style={{ maxWidth: "700px", marginLeft: "18%" ,paddingRight: "40px"}}
+          />
+
+          {searchText && (
+            <span
+              onClick={() => {
+                setSearchText("");
+                setShowDropdown(false);
+                fetchUsers(); // reload all users
+              }}
+              style={{
+                position: "absolute",
+                right: "calc(18% + 21px)",
+                top: "50%",
+                transform: "translateY(-50%)",
+                cursor: "pointer",
+                fontSize: "18px",
+                color: "#888",
+              }}
+            >
+              ❌
+            </span>
+          )}
+
+          {/* DROPDOWN */}
+          {showDropdown && searchResults.length > 0 && (
+            <ul
+              className="list-group"
+              style={{
+                position: "absolute",
+                width: "700px",
+                left: "18%",
+                zIndex: 1000,
+              }}
+            >
+              {searchResults.map((item) => (
+                <li
+                  key={item.userId}
+                  className="list-group-item list-group-item-action"
+                  onClick={() => handleSelectUser(item)}
+                  style={{ cursor: "pointer" }}
+                >
+                  @{item.userLoginId} {/* visible */}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
         {users.map((item) => {
           const imageUrl = item.profileImageName

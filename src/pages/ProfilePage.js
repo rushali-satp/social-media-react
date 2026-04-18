@@ -222,8 +222,19 @@ const handleDelete = async (postId) => {
             </span>
           </div>
 
+          <div style={{ flex: 1, marginLeft: "30px" }}>
+
+            {/* ✅ Official Name (NEW) */}
+            <h5 style={{ fontWeight: "bold", marginBottom: "10px" }}>
+              {userLoginId}
+            </h5>
+
+            {/* Stats Row */}
+            <div className="d-flex justify-content-between">
+
+
           {/* Stats */}
-          <div className="text-center">
+          <div className="text-center text-primary">
             <h5>{posts.length}</h5>
             <small>Posts</small>
           </div>
@@ -248,6 +259,7 @@ const handleDelete = async (postId) => {
             <small>Following</small>
           </div>
         </div>
+        </div></div>
 
         {/* Bio Section */}
         <div className="mt-4">
