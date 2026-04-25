@@ -11,6 +11,11 @@ const Register = () => {
   const [emailId, setEmailId] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  
+
+
 
   const handleRegister = async () => {
     const newErrors = {};
@@ -63,6 +68,7 @@ const Register = () => {
     };
 
     try {
+      setLoading(true);
       const response = await fetch("http://localhost:8080/api/users/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -75,14 +81,40 @@ const Register = () => {
       navigate("/login");
     } catch (err) {
       alert("Error creating account");
+    }finally {
+    setLoading(false); // 🔹 stop loader
     }
   };
 
-  return (
-    <div style={{ width: "50%", marginLeft: "27%" }}>
-      <div className="card mt-4 p-5" >
+  
 
-        <h6 className="mb-3 text-center">Create Account</h6>
+  return (
+   
+   <div
+       style={{
+          minHeight: "100vh",
+          background: "linear-gradient(135deg, #f7971e, #ff512f)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+    >
+      <div
+         style={{
+            width: "620px",
+            padding: "30px",
+            borderRadius: "12px",
+            background: "rgba(196, 159, 159, 0.15)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+            border: "1px solid rgba(235, 231, 231, 0.4)",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
+            textAlign: "left",
+            color: "#0c0c0c",
+          }}
+       >
+
+        <h6 className="mb-3 text-center" style={{ fontWeight: "bold", letterSpacing: "1px" }}>Create Account</h6>
 
         
 
@@ -94,18 +126,22 @@ const Register = () => {
           <input
             type="text"
             className="form-control form-control-sm"
+            autoComplete="new-username"
+            style={{
+              background: "rgba(255,255,255,0.7)"
+            }}
             value={regUsername}
             onChange={(e) => setRegUsername(e.target.value)}
           />
           {errors.regUsername && (
-            <div style={{ color: "red", fontSize: "12px" }}>
+            <div style={{ color: "white", fontSize: "12px" }}>
               {errors.regUsername}
             </div>
           )}
         </div>
 
         {/* Password */}
-        <div className="mb-3">
+        <div className="mb-2">
           <label className="form-label small fw-semibold">
             Password
           </label>
@@ -113,14 +149,13 @@ const Register = () => {
             <input
               type={showPassword ? "text" : "password"}
               className="form-control"
+              autoComplete="new-password"
+               style={{
+              background: "rgba(255,255,255,0.7)"
+            }}
               value={regPassword}
               onChange={(e) => setRegPassword(e.target.value)}
             />
-            {errors.regPassword && (
-              <div style={{ color: "red", fontSize: "12px" }}>
-                {errors.regPassword}
-              </div>
-            )}
             <button
               className="btn btn-outline-secondary"
               type="button"
@@ -129,6 +164,11 @@ const Register = () => {
               {showPassword ? "Hide" : "Show"}
             </button>
           </div>
+          {errors.regPassword && (
+              <div style={{ color: "white", fontSize: "12px" }}>
+                {errors.regPassword}
+              </div>
+            )}
         </div>
 
         {/* Official Name */}
@@ -139,11 +179,14 @@ const Register = () => {
           <input
             type="text"
             className="form-control form-control-sm"
+             style={{
+              background: "rgba(255,255,255,0.7)"
+            }}
             value={regName}
             onChange={(e) => setRegName(e.target.value)}
           />
           {errors.regName && (
-            <div style={{ color: "red", fontSize: "12px" }}>
+            <div style={{ color: "white", fontSize: "12px" }}>
               {errors.regName}
             </div>
           )}
@@ -157,11 +200,14 @@ const Register = () => {
           <input
             type="text"
             className="form-control form-control-sm"
+             style={{
+              background: "rgba(255,255,255,0.7)"
+            }}
             value={emailId}
             onChange={(e) => setEmailId(e.target.value)}
           />
           {errors.emailId && (
-            <div style={{ color: "red", fontSize: "12px" }}>
+            <div style={{ color: "white", fontSize: "12px" }}>
               {errors.emailId}
             </div>
           )}
@@ -175,24 +221,39 @@ const Register = () => {
           <input
             type="text"
             className="form-control form-control-sm"
+             style={{
+              background: "rgba(255,255,255,0.7)"
+            }}
             value={mobileNumber}
             onChange={(e) => setMobileNumber(e.target.value)}
           />
           {errors.mobileNumber && (
-            <div style={{ color: "red", fontSize: "12px" }}>
+            <div style={{ color: "white", fontSize: "12px" }}>
               {errors.mobileNumber}
             </div>
           )}
         </div>
 
-        <div className="d-flex justify-content-between mt-4">
-          <button className="btn btn-success btn-sm" onClick={handleRegister}>
-            Register
-          </button>
+          <div className="d-flex mt-4" style={{ gap: "10px" }}>
+            <button 
+              className="btn btn-success btn-sm" 
+              onClick={handleRegister}
+              disabled={loading}
+              
+            >
+              {loading ? (
+                <>
+                  <span className="spinner-border spinner-border-sm me-2"></span>
+                  Saving...
+                </>
+              ) : (
+                "Register"
+              )}
+            </button>
 
           <button 
           style={{
-              background: "linear-gradient(to right, #5f2e6e99, #9b59b699)",
+              background: "linear-gradient(to right, #19791e99, #1faf6099)",
               width: "19%",
               marginLeft: "59%",
               color: "white",
@@ -213,6 +274,7 @@ const Register = () => {
 
       </div>
     </div>
+    
   );
 };
 
