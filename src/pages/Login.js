@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { showSuccess, showError } from "../utils/alert";
 
 
 const Login = () => {
@@ -38,11 +39,11 @@ const Login = () => {
       localStorage.setItem("loggedInUser", JSON.stringify(data[0]));
       navigate("/home");
     } else {
-      alert("Username or password incorrect");
+      showError("Username or password incorrect");
     }
   } catch (error) {
     console.error(error);
-    alert("Something went wrong");
+    showError("Something went wrong");
   } finally {
     setLoading(false); // stop loader
   }

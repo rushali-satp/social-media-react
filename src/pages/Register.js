@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { showSuccess, showError } from "../utils/alert";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -77,10 +78,10 @@ const Register = () => {
 
       if (!response.ok) throw new Error();
 
-      alert("Account created successfully");
+      showSuccess("Account created successfully");
       navigate("/login");
     } catch (err) {
-      alert("Error creating account");
+      showError("Error creating account");
     }finally {
     setLoading(false); // 🔹 stop loader
     }
@@ -225,6 +226,7 @@ const Register = () => {
               background: "rgba(255,255,255,0.7)"
             }}
             value={mobileNumber}
+             maxLength={10}
             onChange={(e) => setMobileNumber(e.target.value)}
           />
           {errors.mobileNumber && (
