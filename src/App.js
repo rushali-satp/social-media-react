@@ -8,6 +8,8 @@ import ProfilePage from "./pages/ProfilePage";
 import SearchPeople from "./pages/SearchPeople";
 import AcceptRequest from "./pages/AcceptRequest";
 import FollowUnfollowUsers from "./pages/FollowUnfollowUsers";
+import AddStatus from "./pages/AddStatus";
+import StatusList from "./pages/StatusList";
 
 function App() {
   const isLoggedIn = localStorage.getItem("loggedInUser");
@@ -23,6 +25,8 @@ function App() {
         <Route path="/searchPeople" element={<SearchPeople />} />
         <Route path="/acceptRequest" element={<AcceptRequest />} />
         <Route path="/followUnfollowUsers" element={<FollowUnfollowUsers />} />
+        <Route path="/addStatus" element={<AddStatus />} />
+        <Route path="/statusList" element={<StatusList />} />
       </Routes>
     </Router>
   );

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import AddPost from "../components/AddPost";
 import PostList from "../components/PostList";
+import AddStatus from "../pages/AddStatus";
+import StatusList from "../pages/StatusList";
 import Navbar from "../components/Navbar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -13,11 +15,13 @@ const Home = () => {
 
   const [posts, setPosts] = useState([]);
   const [activeTab, setActiveTab] = useState("all");
+  const [statuses, setStatuses] = useState([]);
   const navigate = useNavigate();
 
   // 🔄 Load All Posts On Start
   useEffect(() => {
     fetchAllPosts();
+     fetchStatuses();
   }, []);
 
   const mapResponse = (data) => {
@@ -122,6 +126,17 @@ const Home = () => {
   }
 };
 
+const fetchStatuses = async () => {
+  try {
+    const res = await axios.get(
+      "http://localhost:8080/api/status/getAllStatus"
+    );
+
+    setStatuses(res.data.message);
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   return (
     <>
@@ -136,6 +151,13 @@ const Home = () => {
         }}
       >
         <h4>Hello, {userOfficialName} 👋</h4>
+
+        <AddStatus
+          userId={userId}
+          onStatusAdded={fetchStatuses}
+        />
+
+<StatusList statuses={statuses} />
 
         {activeTab === "all" && (
           <AddPost onAdd={(post) => setPosts((p) => [post, ...p])} />
