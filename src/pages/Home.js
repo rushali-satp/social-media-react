@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import AddPost from "../components/AddPost";
 import PostList from "../components/PostList";
 import AddStatus from "../pages/AddStatus";
-import StatusList from "../pages/StatusList";
 import Navbar from "../components/Navbar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -153,11 +152,12 @@ const fetchStatuses = async () => {
         <h4>Hello, {userOfficialName} 👋</h4>
 
         <AddStatus
-          userId={userId}
-          onStatusAdded={fetchStatuses}
+          statuses={statuses}
+        userId={userId}
+        refreshStatuses={fetchStatuses}
         />
 
-<StatusList statuses={statuses} />
+
 
         {activeTab === "all" && (
           <AddPost onAdd={(post) => setPosts((p) => [post, ...p])} />
