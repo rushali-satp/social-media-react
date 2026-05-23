@@ -205,15 +205,34 @@ const AddStatus = ({ statuses, userId, refreshStatuses }) => {
             </h5>
 
             {/* STATUS TEXT */}
-            <p
+            {/* ALL STATUS TEXTS */}
+            <div
               style={{
                 marginTop: "20px",
-                fontSize: "18px",
-                fontWeight: "500",
               }}
             >
-              {selectedStory.statusText}
-            </p>
+              {selectedStory.statuses.map((item, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    background: "#f5f5f5",
+                    padding: "10px",
+                    borderRadius: "10px",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontSize: "16px",
+                      fontWeight: "500",
+                      margin: 0,
+                    }}
+                  >
+                    {item.statusText}
+                  </p>
+                </div>
+              ))}
+            </div>
 
           </div>
         </div>

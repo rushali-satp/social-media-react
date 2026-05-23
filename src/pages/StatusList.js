@@ -28,7 +28,7 @@ const StatusList = ({ statuses }) => {
             fontWeight: "bold",
           }}
         >
-          {status.statusText}
+           {status.statuses[0].statusText}
         </div>
       ))}
     </div>

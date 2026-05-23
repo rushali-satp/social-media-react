@@ -131,7 +131,41 @@ const fetchStatuses = async () => {
       "http://localhost:8080/api/status/getAllStatus"
     );
 
-    setStatuses(res.data.message);
+    // Filter only last 24 hour statuses
+    const recentStatuses = res.data.message.filter((item) => {
+      const createdDate = new Date(item.createdOn);
+      const now = new Date();
+
+      const diffInHours =
+        (now - createdDate) / (1000 * 60 * 60);
+
+      return diffInHours <= 24;
+    });
+
+    // Group statuses by userId
+    const groupedStatuses = [];
+
+    recentStatuses.forEach((status) => {
+      const existingUser = groupedStatuses.find(
+        (item) => item.userId === status.userId
+      );
+
+      if (existingUser) {
+        // Add new status to same user
+        existingUser.statuses.push(status);
+      } else {
+        // Create new user object
+        groupedStatuses.push({
+          userId: status.userId,
+          userLoginId: status.userLoginId,
+          profileImageName: status.profileImageName,
+          statuses: [status],
+        });
+      }
+    });
+
+    setStatuses(groupedStatuses);
+
   } catch (err) {
     console.error(err);
   }
