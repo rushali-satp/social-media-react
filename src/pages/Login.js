@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { showSuccess, showError } from "../utils/alert";
+import ChatBot from "../pages/ChatBot";
 
 
 const Login = () => {
@@ -140,6 +141,9 @@ const Login = () => {
           </div>
         </div>
       )}
+
+      {/* AI Chatbot */}
+      <ChatBot />
     </div>
 
 

@@ -10,6 +10,7 @@ import AcceptRequest from "./pages/AcceptRequest";
 import FollowUnfollowUsers from "./pages/FollowUnfollowUsers";
 import AddStatus from "./pages/AddStatus";
 import StatusList from "./pages/StatusList";
+import ChatBot from "./pages/ChatBot";
 
 function App() {
   const isLoggedIn = localStorage.getItem("loggedInUser");
@@ -27,6 +28,7 @@ function App() {
         <Route path="/followUnfollowUsers" element={<FollowUnfollowUsers />} />
         <Route path="/addStatus" element={<AddStatus />} />
         <Route path="/statusList" element={<StatusList />} />
+         <Route path="/chatBot" element={<ChatBot />} />
       </Routes>
     </Router>
   );
