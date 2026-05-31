@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect, useRef} from "react";
 import axios from "axios";
 import "../css/ChatBot.css";
 
@@ -6,6 +6,14 @@ function ChatBot() {
 
   const [message, setMessage] = useState("");
   const [chat, setChat] = useState([]);
+  const chatBoxRef = useRef(null);
+
+  
+  useEffect(() => {
+    if (chatBoxRef.current) {
+      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    }
+  }, [chat]);
 
   const sendMessage = async () => {
 
@@ -71,7 +79,7 @@ function ChatBot() {
           🤖 Mini Social Assistant
         </div>
 
-        <div className="chat-box">
+        <div className="chat-box" ref={chatBoxRef}>
           {chat.map((msg, index) => (
             <div
               key={index}

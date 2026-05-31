@@ -18,10 +18,12 @@
 }
 
 .chat-box {
-  flex: 1;
-  overflow-y: auto;
-  padding: 15px;
-  background: #f5f7fb;
+    height: 400px;      /* Fixed height */
+    overflow-y: auto;   /* Enable vertical scrolling */
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .message {
